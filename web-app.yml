@@ -17,13 +17,6 @@ spec:
       containers:
       - name: mongo-express
         image: mongo-express:latest
-         resources:
-          requests:
-            memory: "1Gi"
-            cpu: "500m"
-          limits:
-            memory: "1Gi"
-            cpu: "500m"
         ports:
         - containerPort: 8081
         env:
@@ -50,9 +43,8 @@ kind: Service
 metadata:
   name: webapp-service
 spec:
-  type: NodePort
   selector:
-   app: webapp 
+    app: webapp
   ports:
   - protocol: TCP
     port: 8081
