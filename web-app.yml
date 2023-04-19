@@ -43,8 +43,9 @@ kind: Service
 metadata:
   name: webapp-service
 spec:
+  type: NodePort
   selector:
-    app: webapp
+   app: webapp 
   ports:
   - protocol: TCP
     port: 8081
