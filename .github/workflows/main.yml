@@ -23,7 +23,7 @@ jobs:
           AWS_ACCOUNT_ID: 057822818513
           IMAGE_TAG: 1.0
         run: |
-          docker-compose build -t $ECR_REPOSITORY:$IMAGE_TAG .
+          docker-compose build 
           echo ${{ secrets.AWS_ACCESS_KEY_ID }} | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
           docker tag $ECR_REPOSITORY:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
