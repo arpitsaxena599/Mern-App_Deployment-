@@ -1,0 +1,29 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Docker setup is not required if Docker is already installed
+      # - name: Set up Docker
+      #   uses: docker/setup-docker@v1
+
+      - name: Build and push Docker image
+        env:
+          ECR_REPOSITORY: calis-reactjs
+          AWS_ACCOUNT_ID: 057822818513
+          IMAGE_TAG: 1.0
+        run: |
+          docker-compose build -t $ECR_REPOSITORY:$IMAGE_TAG .
+          echo ${{ secrets.AWS_ACCESS_KEY_ID }} | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+          docker tag $ECR_REPOSITORY:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
