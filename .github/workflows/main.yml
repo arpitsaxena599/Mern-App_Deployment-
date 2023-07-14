@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Test Self-Hosted Runner
 
 on:
   push:
@@ -6,24 +6,15 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  test-runner:
     runs-on: self-hosted
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Docker setup is not required if Docker is already installed
-      # - name: Set up Docker
-      #   uses: docker/setup-docker@v1
-
-      - name: Build and push Docker image
-        env:
-          ECR_REPOSITORY: calis-reactjs
-          AWS_ACCOUNT_ID: 057822818513
-          IMAGE_TAG: 1.0
+      - name: Print runner information
         run: |
-          docker-compose build 
-          echo ${{ secrets.AWS_ACCESS_KEY_ID }} | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-          docker tag $ECR_REPOSITORY:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "This job is running on a self-hosted runner"
+          echo "Runner name: ${{ runner.os }}"
+          echo "Runner version: ${{ runner.runnerVersion }}"
